@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Consultation</title>
+    <link rel="stylesheet" href="med.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>MedEasy</h1>
+            <p>Medical Facility</p>
+        </div>
+        <!-- Back to Homepage -->
+        <div class="home">
+            <strong><a href="../med.html">Home</a></strong>
+        </div>
+    </header>
+<section>
+    <div class="consult">
+        <h1>Schedule Consultation with Specialist</h1>
+        <form id="consultationForm" action="submit_form.php" method="POST" onsubmit="return validateForm()">
+            
+            <!-- Name -->
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+            <div id="nameError" class="error"></div>
+
+            <!-- Email -->
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+            <div id="emailError" class="error"></div>
+
+            <!-- Phone Number -->
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required pattern="^\d{10}$" placeholder="Enter 10-digit phone number">
+            <div id="phoneError" class="error"></div>
+
+            <!-- Specialization -->
+            <label for="specialization">Specialist Area:</label>
+            <select id="specialization" name="specialization" required>
+                <option value="">Select a specialist</option>
+                <option value="Cardiologist">Cardiologist</option>
+                <option value="Dermatologist">Dermatologist</option>
+                <option value="Neurologist">Neurologist</option>
+                <option value="Orthopedic">Orthopedic</option>
+            </select>
+            <div id="specializationError" class="error"></div>
+
+            <!-- Consultation Date -->
+            <label for="date">Preferred Consultation Date:</label>
+            <input type="date" id="date" name="date" required>
+            <div id="dateError" class="error"></div>
+
+            <!-- Message -->
+            <label for="message">Additional Message or Information:</label>
+            <textarea id="message" name="message"></textarea>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Consultation Request</button>
+        </form>
+    </div>
+</section>
+
+    <script >
+        function validateForm() {
+    let valid = true;
+    
+    // Clear previous error messages
+    document.getElementById('nameError').innerText = '';
+    document.getElementById('emailError').innerText = '';
+    document.getElementById('phoneError').innerText = '';
+    document.getElementById('specializationError').innerText = '';
+    document.getElementById('dateError').innerText = '';
+    
+    // Validate name
+    const name = document.getElementById('name').value;
+    if (name.trim() === "") {
+        document.getElementById('nameError').innerText = "Name is required.";
+        valid = false;
+    }
+    
+    // Validate email
+    const email = document.getElementById('email').value;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+        document.getElementById('emailError').innerText = "Please enter a valid email address.";
+        valid = false;
+    }
+
+    // Validate phone number
+    const phone = document.getElementById('phone').value;
+    const phonePattern = /^\d{10}$/;
+    if (!phonePattern.test(phone)) {
+        document.getElementById('phoneError').innerText = "Phone number should be 10 digits.";
+        valid = false;
+    }
+
+    // Validate specialization
+    const specialization = document.getElementById('specialization').value;
+    if (specialization === "") {
+        document.getElementById('specializationError').innerText = "Please select a specialist area.";
+        valid = false;
+    }
+
+    // Validate date
+    const date = document.getElementById('date').value;
+    if (date === "") {
+        document.getElementById('dateError').innerText = "Please select a date for consultation.";
+        valid = false;
+    }
+    
+    return valid;
+}
+
+    </script>
+    <!--For making footer of the webpage-->
+    <footer>
+        <p>&copy; MedEasy | All Rights Reserved</p>
+    </footer>

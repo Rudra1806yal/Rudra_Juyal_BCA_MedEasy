@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Bed Availability</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #111111;
+            --primary-color: #ff6600;
+            --secondary-color: #ffe5d0;
+            --table-header: #f5f5f5;
+            --available: #2ecc71;
+            --unavailable: #e74c3c;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #f5f5f5;
+            --primary-color: #ff8800;
+            --secondary-color: #222;
+            --table-header: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+        }
+
+        .logo h1 {
+            margin: 0;
+        }
+
+        .home a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 0.5rem;
+            width: 250px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .status-table thead {
+            background-color: var(--table-header);
+        }
+
+        .status-table th, .status-table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .available {
+            color: var(--available);
+            font-weight: bold;
+        }
+
+        .unavailable {
+            color: var(--unavailable);
+            font-weight: bold;
+        }
+
+        .refresh-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .refresh-btn:hover {
+            background-color: #e65c00;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .dark-toggle {
+            cursor: pointer;
+            background: none;
+            border: 2px solid white;
+            border-radius: 20px;
+            color: white;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <h1>MedEasy</h1>
+            <p>Medical Facility</p>
+        </div>
+        <div class="home">
+            <button class="dark-toggle" id="darkToggle">Toggle Dark Mode</button>
+            <strong><a href="../med.html">Home</a></strong>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Real-Time Bed Availability</h1>
+
+        <div class="form">
+            <form>
+                <label for="ward-search">Search Ward:</label>
+                <input type="text" id="ward-search" placeholder="Search Ward">
+
+                <label for="availability-filter" style="margin-left: 20px;">Filter by Availability:</label>
+                <select id="availability-filter">
+                    <option value="all">All Beds</option>
+                    <option value="available">Available Beds</option>
+                    <option value="unavailable">Unavailable Beds</option>
+                </select>
+            </form>
+        </div>
+
+        <table class="status-table">
+            <thead>
+                <tr>
+                    <th>Bed Number</th>
+                    <th>Ward</th>
+                    <th>Bed Availability</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody id="bed-status-table">
+                <!-- Dynamic data will populate here -->
+            </tbody>
+        </table>
+
+        <button class="refresh-btn" id="refresh-btn">Refresh Availability</button>
+    </div>
+
+    <footer>
+        <p>&copy; MedEasy | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        const wards = ['Emergency', 'I.C.U', 'General'];
+        const bedData = [];
+
+        for (let i = 0; i < 200; i++) {
+            bedData.push({
+                BedNumber: (101 + i).toString(),
+                ward: wards[i % wards.length],
+                available: Math.random() > 0.5
+            });
+        }
+
+        const searchInput = document.getElementById('ward-search');
+        const availabilityFilter = document.getElementById('availability-filter');
+
+        function updateBedStatus() {
+            const tableBody = document.getElementById('bed-status-table');
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const availabilityValue = availabilityFilter.value;
+
+            tableBody.innerHTML = '';
+
+            const now = new Date().toLocaleString();
+
+            const filteredBeds = bedData.filter(bed => {
+                const matchesWard = bed.ward.toLowerCase().includes(searchTerm);
+                const matchesAvailability =
+                    availabilityValue === 'all' ||
+                    (availabilityValue === 'available' && bed.available) ||
+                    (availabilityValue === 'unavailable' && !bed.available);
+                return matchesWard && matchesAvailability;
+            });
+
+            filteredBeds.forEach(bed => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${bed.BedNumber}</td>
+                    <td>${bed.ward}</td>
+                    <td class="${bed.available ? 'available' : 'unavailable'}">
+                        ${bed.available ? 'Available' : 'Unavailable'}
+                    </td>
+                    <td>${now}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        document.getElementById('refresh-btn').addEventListener('click', updateBedStatus);
+        searchInput.addEventListener('input', updateBedStatus);
+        availabilityFilter.addEventListener('change', updateBedStatus);
+
+        document.getElementById('darkToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Initial load
+        updateBedStatus();
+    </script>
+</body>
+</html>

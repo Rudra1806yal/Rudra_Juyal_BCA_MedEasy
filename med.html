@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MedEasy</title>
+    <link rel="stylesheet" href="med.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>MedEasy</h1>
+            <p>Medical Facility</p>
+        </div>
+            <!--For creating search option-->
+        <div class="form">
+            <form action = "/search.html" method="get">
+                <input class="form-input"type = "text" placeholder="Search items">
+                <button class="btn">Search</button>
+            </form>
+
+        </div>        
+    </header>
+    <!--For making the content of the webpage-->
+    <section id="home">
+        <div class="home">
+            <h2>Welcome to MedEasy</h2>
+            <p><b><i>MedEasy helps you to clarify your healthcare because your health is our 
+                priority.The Quality healthcare services are available for all the customer who needed.</i></b></p>
+        
+        </div>
+    </section>
+
+    <section id="services">
+        <h2>Our Services</h2>
+        <ul>
+            <li><b><i><a href="/real.html">Real time bed availability</a></i></b></li>
+            <li><b><i><a href ="/pedigree.html" >Pedigree Analysis</a></i></b></li>
+            <li><b><i><a href ="/consult.html">Consultations with Specialists</a></i></b></li>
+            <li><b><i><a href ="/care.html">Homecare Facility</a></i></b></li>
+            <li><b><i><a href ="/services.html">Emergency Services</a></i></b></li>
+        </ul>
+        
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p><b><i>HealthCare is a leading medical facility dedicated to providing top-notch health services. 
+            We have a team of expert doctors and hospitals that are ready to serve you.</i></b></p>
+        
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <form action="/action.php" method="POST">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    alert("Your message has been sent!");
+});
+</script>
+<!--For making footer of the webpage-->
+    <footer>
+        <p>&copy; MedEasy | All Rights Reserved</p>
+    </footer>
+
+    <script src="med.js"></script>
+</body>
+</html>
